@@ -69,16 +69,6 @@
             var element = node.querySelectorAll(selector)[0];
             return element ? new Node(element) : null;
         };
-
-        /**
-         * @param {string} selector
-         * @param {node|HTMLElement} [node]
-         * @returns {NodeList}
-         */
-        this.findAll = function(selector, node) {
-            node = node || $;
-            return node.querySelectorAll(selector);
-        };
         /**
          * Returns the next sibling with class name className or CLASS.NODE_CLASS
          * @param {string} [className]
@@ -135,7 +125,7 @@
          * @param {node|HTMLElement} [node]
          */
         this.removeClass = function(className, node) {
-            var node = node || $;
+            node = node || $;
             if (node.classList) {
                 node.classList.remove(className);
             } else {
@@ -151,7 +141,7 @@
          * @return {boolean}
          */
         this.hasClass = function(className, node) {
-            var node = node || $;
+            node = node || $;
             if (node.classList) {
                 return node.classList.contains(className);
             } else {
@@ -495,52 +485,6 @@
         };
     };
 
-
-    //-----
-    function addLoadEvent(func) {
-        var oldOnLoad = window.onload;
-        if (typeof window.onload != 'function') {
-            window.onload = func;
-        } else {
-            window.onload = function() {
-                if (oldOnLoad) {
-                    oldOnLoad();
-                }
-                func();
-            }
-        }
-    }
-
-    /**
-     * Overloads an object's method
-     * @param object
-     * @param name
-     * @param fn
-     */
-    function addMethod(object, name, fn) {
-        var old = object[name];
-        object[name] = function() {
-            if (fn.length == arguments.length) {
-                return fn.apply(this, arguments);
-            } else if (typeof old == 'function') {
-                return old.apply(this, arguments);
-            }
-        }
-    }
-
-    /**
-     * Returns DOM elements matching the given class names
-     * @param selector
-     * @returns {NodeList | null}
-     */
-    function findByClass(selector) {
-        if (typeof document.getElementsByClassName == "function") {
-            return document.getElementsByClassName(selector);
-        } else if (typeof document.querySelectorAll == "function") {
-            return document.querySelectorAll(selector.replace(/^|\s/g, '.'));
-        }
-    }
-
     /**
      * Throws an alert for our library
      * todo: only throw an alert if in "dev" mode. Add "dev" mode.
@@ -556,5 +500,4 @@
     }
     window.Jpanel = new Jpanel();
     window.Jpanel.init();
-    console.log(window.Jpanel);
 })();
