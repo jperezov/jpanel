@@ -31,10 +31,10 @@
     box-sizing: border-box;
 }
 .jpanel-hide-top {
-    top: -100%;
+    top: 100%;
 }
 .jpanel-hide-bottom {
-    top: 100%;
+    top: -100%;
 }
 .jpanel-hide-left {
     left: -100%;
