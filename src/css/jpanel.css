@@ -43,7 +43,13 @@
     left: 100%;
 }
 /* Used solely to determine whether to use mobile or desktop JS */
-.jpanel-mobile-check { z-index: 1; !important; }
+#jpanel-mobile-check {
+    z-index: 1;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+}
 
 /* Desktop-only queries */
 @media (min-width: 800px) {
@@ -59,5 +65,5 @@
 /* Mobile-only queries */
 @media (max-width: 799px) {
     /* Used solely to determine whether to use mobile or desktop JS */
-    .jpanel-mobile-check { z-index: 2; !important; }
+    #jpanel-mobile-check { z-index: 2; }
 }

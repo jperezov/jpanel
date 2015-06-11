@@ -344,14 +344,36 @@
         }
 
         this.next = function() {
-            if (self.panel.next){
+            if (
+                self.panel.panel &&
+                self.panel.panel.next &&
+                (
+                    (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
+                    (self.panel.groupInDevice === "mobile" && isMobile() === false)
+                )
+            ) {
+                self.panel.panel.hide(true);
+                self.panel.panel.next.show();
+                self.panel.panel = self.panel.panel.next;
+            } else if (self.panel.next) {
                 self.panel.hide(true);
                 self.panel.next.show();
                 self.panel = self.panel.next;
             }
         };
         this.prev = function() {
-            if (self.panel.prev){
+            if (
+                self.panel.panel &&
+                self.panel.panel.prev &&
+                (
+                (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
+                (self.panel.groupInDevice === "mobile" && isMobile() === false)
+                )
+            ) {
+                self.panel.panel.hide(false);
+                self.panel.panel.prev.show();
+                self.panel.panel = self.panel.panel.prev;
+            } else if (self.panel.prev) {
                 self.panel.hide(false);
                 self.panel.prev.show();
                 self.panel = self.panel.prev;
@@ -495,6 +517,23 @@
             //alert("jPanel error: " + err);
         }
     }
+
+    /**
+     * Function that inserts an element and checks
+     * @returns {boolean}
+     */
+    var isMobile = (function() {
+        document.body.insertAdjacentHTML('afterend', '<span id="jpanel-mobile-check"></span>');
+        var mobileNode = document.getElementById("jpanel-mobile-check");
+        return function() {
+            if (window.getComputedStyle) {
+                return +window.getComputedStyle(mobileNode, null).getPropertyValue('z-index') === 2;
+            } else if (mobileNode.currentStyle){
+                return +mobileNode.currentStyle.zIndex === 2;
+            }
+        };
+    })();
     window.Jpanel = new Jpanel();
     window.Jpanel.init();
+    console.log(isMobile());
 })();
