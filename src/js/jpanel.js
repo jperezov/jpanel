@@ -366,8 +366,8 @@
                 self.panel.panel &&
                 self.panel.panel.prev &&
                 (
-                (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
-                (self.panel.groupInDevice === "mobile" && isMobile() === false)
+                    (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
+                    (self.panel.groupInDevice === "mobile" && isMobile() === false)
                 )
             ) {
                 self.panel.panel.hide(false);
