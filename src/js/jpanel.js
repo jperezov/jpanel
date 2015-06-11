@@ -535,5 +535,4 @@
     })();
     window.Jpanel = new Jpanel();
     window.Jpanel.init();
-    console.log(isMobile());
 })();
