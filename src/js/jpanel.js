@@ -242,10 +242,7 @@
         function setInitialPosition() {
             /** @type {String} */
             self.initialPosition = self.slideAxis == "y" ? "top" : "right";
-            if (
-                self.parent instanceof Panel === false &&
-                self.id > 0
-            ) {
+            if (self.id > 0) {
                 $.addClass(CLASS.HIDE.PREFIX + self.initialPosition);
             }
         }
