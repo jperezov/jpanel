@@ -1,0 +1,69 @@
+.jpanel-animate,
+.jpanel-animate .jpanel-node {
+    -webkit-transition: all 500ms ease-in-out, border-radius 1ms;
+    -moz-transition: all 500ms ease-in-out, border-radius 1ms;
+    -o-transition: all 500ms ease-in-out, border-radius 1ms;
+    transition: all 500ms ease-in-out, border-radius 1ms;
+}
+.jpanel-animate-fast,
+.jpanel-animate-fast .jpanel-node {
+    -webkit-transition: all 250ms ease-in-out, border-radius 1ms;
+    -moz-transition: all 250ms ease-in-out, border-radius 1ms;
+    -o-transition: all 250ms ease-in-out, border-radius 1ms;
+    transition: all 250ms ease-in-out, border-radius 1ms;
+}
+.jpanel-root {
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+.jpanel-node {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.jpanel-hide-top {
+    top: 100%;
+}
+.jpanel-hide-bottom {
+    top: -100%;
+}
+.jpanel-hide-left {
+    left: -100%;
+}
+.jpanel-hide-right {
+    left: 100%;
+}
+/* Used solely to determine whether to use mobile or desktop JS */
+#jpanel-mobile-check {
+    z-index: 1;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Desktop-only queries */
+@media (min-width: 800px) {
+    [data-jp-group-in-device="desktop"] .jpanel-node {
+        display: table-cell;
+        position: relative;
+        width: 50%;
+    }
+    .jpanel-hide-on-desktop {
+        display: none;
+    }
+}
+/* Mobile-only queries */
+@media (max-width: 799px) {
+    /* Used solely to determine whether to use mobile or desktop JS */
+    #jpanel-mobile-check { z-index: 2; }
+}

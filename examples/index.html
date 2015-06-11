@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../src/css/jpanel.css"/>
+    <style>
+        div.result {
+            border: 1px solid #555;
+            padding: 10px;
+            margin: 25px 0 0;
+        }
+        pre {
+            border: 1px solid #555;
+            border-top: 5px solid #5c5c5c;
+            padding: 10px;
+            margin: 0 0 5px;
+        }
+        pre > code {
+            color: #000;
+        }
+        span.tag {
+            color: #800000;
+        }
+        span.atn {
+            color: #f00;
+        }
+        span.atv {
+            color: #00f;
+        }
+        span.com {
+            color: #808080;
+        }
+        span.jpanel-transition {
+            color: #0000cc;
+            text-decoration: underline;
+        }
+        span.jpanel-transition:hover {
+            cursor: pointer;
+            text-decoration: none;
+        }
+        span.jpanel-transition:active {
+            color: #cc0000;
+        }
+        #desktop-or-mobile {
+            font-weight: bold;
+            color: #aa0000;
+        }
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #c5c5c5;
+        }
+        .fixed-footer p {
+            margin: 2px;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="fixed-footer">
+    <p>Mobile code triggered at screen widths less than 800px</p>
+    <p>Currently in <span id="desktop-or-mobile"></span> view.</p>
+</div>
+<div class="result">
+    <div class="jpanel-root" data-jp-root="default">
+
+        <div class="jpanel-node">
+            <h1>Default jPanel Usage</h1>
+            <p>
+                <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+            </p>
+        </div>
+        <div class="jpanel-node">
+            <h1>This functions as a basic slider</h1>
+            <p>
+                <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+            </p>
+        </div>
+    </div>
+</div>
+<pre><code><span class="com">&lt;!--Default jPanel usage--></span>
+<span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-root"</span> <span class="atn">data-jp-root</span>=<span class="atv">"default"</span><span class="tag">></span>
+    <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
+        <span class="tag">&lt;h1></span>Default jPanel Usage<span class="tag">&lt;/h1></span>
+        <span class="tag">&lt;p></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"prev"</span><span class="tag">></span>Previous<span class="tag">&lt;/span></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"next"</span><span class="tag">></span>Next<span class="tag">&lt;/span></span>
+        <span class="tag">&lt;/p></span>
+    <span class="tag">&lt;/div></span>
+    <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
+        <span class="tag">&lt;h1></span>This functions as a basic slider<span class="tag">&lt;/h1></span>
+        <span class="tag">&lt;p></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"prev"</span><span class="tag">></span>Previous<span class="tag">&lt;/span></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"next"</span><span class="tag">></span>Next<span class="tag">&lt;/span></span>
+        <span class="tag">&lt;/p></span>
+    <span class="tag">&lt;/div></span>
+<span class="tag">&lt;/div></span>
+</code></pre>
+
+
+<div class="result">
+    <div class="jpanel-root"
+         data-jp-root="vertical"
+         data-jp-slide-axis="y">
+
+        <div class="jpanel-node">
+            <h1>Let's change the slide axis now...</h1>
+            <p>
+                <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+            </p>
+        </div>
+        <div class="jpanel-node" data-jp-group-in-device="desktop">
+            <div class="jpanel-node">
+                <h1>While we're at it, let's group this on desktops.</h1>
+                <p class="jpanel-hide-on-desktop">
+                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                </p>
+            </div>
+            <div class="jpanel-node">
+                <h1>Try shrinking the window!</h1>
+                <p>
+                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<pre><code><span class="com">&lt;!--Vertical slide axis with device grouping--></span>
+<span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-root"</span>
+     <span class="atn">data-jp-root</span>=<span class="atv">"vertical"</span>
+     <span class="atn">data-jp-slide-axis</span>=<span class="atv">"y"</span><span class="tag">></span>
+    <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
+        <span class="tag">&lt;h1></span>Let's change the slide axis now...<span class="tag">&lt;/h1></span>
+        <span class="tag">&lt;p></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"prev"</span><span class="tag">></span>Previous<span class="tag">&lt;/span></span>
+            <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"next"</span><span class="tag">></span>Next<span class="tag">&lt;/span></span>
+        <span class="tag">&lt;/p></span>
+    <span class="tag">&lt;/div></span>
+    <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span> <span class="atn">data-jp-group-in-device</span>=<span class="atv">"desktop"</span><span class="tag">></span>
+        <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
+            <span class="tag">&lt;h1></span>While we're at it, let's group this on desktops.<span class="tag">&lt;/h1></span>
+            <span class="tag">&lt;p <span class="atn">class</span>=<span class="atv">"jpanel-hide-on-desktop"</span>></span>
+                <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"prev"</span><span class="tag">></span>Previous<span class="tag">&lt;/span></span>
+                <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"next"</span><span class="tag">></span>Next<span class="tag">&lt;/span></span>
+            <span class="tag">&lt;/p></span>
+        <span class="tag">&lt;/div></span>
+        <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
+            <span class="tag">&lt;h1></span>Try shrinking the window!<span class="tag">&lt;/h1></span>
+            <span class="tag">&lt;p></span>
+                <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"prev"</span><span class="tag">></span>Previous<span class="tag">&lt;/span></span>
+                <span class="tag">&lt;span</span> <span class="atn">class</span>=<span class="atv">"jpanel-transition"</span> <span class="atn">data-jp-go-to</span>=<span class="atv">"next"</span><span class="tag">></span>Next<span class="tag">&lt;/span></span>
+            <span class="tag">&lt;/p></span>
+        <span class="tag">&lt;/div></span>
+    <span class="tag">&lt;/div></span>
+<span class="tag">&lt;/div></span>
+</code></pre>
+
+<script src="../src/js/jpanel.js"></script>
+<script>
+    (function() {
+        var Jpanel = window.Jpanel;
+        var mobileDesktopDisplay = document.getElementById("desktop-or-mobile");
+        document.body.onresize = function() {
+            mobileDesktopDisplay.innerHTML = Jpanel.isMobile() ? "mobile" : "desktop";
+        };
+        document.body.onresize();
+    })();
+</script>
+</body>
+</html>
