@@ -316,6 +316,9 @@
         this.setAnimation = function() {
             $.addClass(CLASS.ANIMATE.DEFAULT);
         };
+        this.removeAnimation = function() {
+            $.removeClass(CLASS.ANIMATE.DEFAULT);
+        };
 
         function setInitializeOn() {
             self.initializeOn = $.data(DATA.INITIALIZE_ON) || "immediate";
@@ -359,6 +362,8 @@
                 self.panel.hide(true);
                 self.panel.next.show();
                 self.panel = self.panel.next;
+            } else {
+                self._goToStart();
             }
         };
         this.prev = function() {
@@ -377,7 +382,24 @@
                 self.panel.hide(false);
                 self.panel.prev.show();
                 self.panel = self.panel.prev;
+            } else {
+                self._goToEnd();
             }
+        };
+        this._goToStart = function() {
+            self.removeAnimation();
+            while (self.panel.parent instanceof Panel === false && self.panel.id > 0) {
+                self.prev();
+            }
+            self.setAnimation();
+        };
+        this._goToEnd = function() {
+            self.removeAnimation();
+            // todo: make this work for nested panels as well.
+            while (self.panel.parent instanceof Panel === false && self.panel.next !== null) {
+                self.next();
+            }
+            self.setAnimation();
         };
     };
 
@@ -535,4 +557,5 @@
     })();
     window.Jpanel = new Jpanel();
     window.Jpanel.init();
+    window.Jpanel.isMobile = isMobile; //todo: figure out if this is necessary, and if so, clean it up.
 })();

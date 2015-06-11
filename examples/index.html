@@ -42,10 +42,28 @@
         span.jpanel-transition:active {
             color: #cc0000;
         }
+        #desktop-or-mobile {
+            font-weight: bold;
+            color: #aa0000;
+        }
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #c5c5c5;
+        }
+        .fixed-footer p {
+            margin: 2px;
+            padding: 2px;
+        }
     </style>
 </head>
 <body>
-
+<div class="fixed-footer">
+    <p>Mobile code triggered at screen widths less than 800px</p>
+    <p>Currently in <span id="desktop-or-mobile"></span> view.</p>
+</div>
 <div class="result">
     <div class="jpanel-root" data-jp-root="default">
 
@@ -146,5 +164,15 @@
 </code></pre>
 
 <script src="../src/js/jpanel.js"></script>
+<script>
+    (function() {
+        var Jpanel = window.Jpanel;
+        var mobileDesktopDisplay = document.getElementById("desktop-or-mobile");
+        document.body.onresize = function() {
+            mobileDesktopDisplay.innerHTML = Jpanel.isMobile() ? "mobile" : "desktop";
+        };
+        document.body.onresize();
+    })();
+</script>
 </body>
 </html>
