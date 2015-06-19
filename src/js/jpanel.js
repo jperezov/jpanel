@@ -99,10 +99,8 @@
             node = node || $;
             key = 'data-' + key;
             if (val !== undefined) {
-                // Setter
                 node.setAttribute(key, val);
             } else {
-                // Getter
                 return node.getAttribute(key) || "";
             }
         };
@@ -250,7 +248,7 @@
         /**
          * Determines whether to transition to the next sibling, or to the next child.
          * @param isMobile
-         * @returns {*}
+         * @returns {boolean}
          */
         this.transitionContents = function(isMobile) {
             if (self.groupInDevice == "desktop") return isMobile;

@@ -1,16 +1,16 @@
 .jpanel-animate,
 .jpanel-animate .jpanel-node {
-    -webkit-transition: all 500ms ease-in-out, border-radius 1ms;
-    -moz-transition: all 500ms ease-in-out, border-radius 1ms;
-    -o-transition: all 500ms ease-in-out, border-radius 1ms;
-    transition: all 500ms ease-in-out, border-radius 1ms;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
 }
 .jpanel-animate-fast,
 .jpanel-animate-fast .jpanel-node {
-    -webkit-transition: all 250ms ease-in-out, border-radius 1ms;
-    -moz-transition: all 250ms ease-in-out, border-radius 1ms;
-    -o-transition: all 250ms ease-in-out, border-radius 1ms;
-    transition: all 250ms ease-in-out, border-radius 1ms;
+    -webkit-transition: all 250ms ease-in-out;
+    -moz-transition: all 250ms ease-in-out;
+    -o-transition: all 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 .jpanel-root {
     min-height: 300px;
