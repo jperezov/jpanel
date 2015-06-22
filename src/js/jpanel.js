@@ -22,7 +22,8 @@
         ANIMATE: {
             DEFAULT: 'jpanel-animate',
             FAST: 'jpanel-animate-fast'
-        }
+        },
+        DISPLAY_NONE: 'jpanel-display-none'
     };
     /**
      * Selector Constants
@@ -49,11 +50,11 @@
 
     /**
      * Custom wrapper for HTML DOM elements
-     * @param {node|HTMLElement} [node]
+     * @param {HTMLElement} [node]
      * @constructor
      */
     var Node = function(node) {
-        /** @type {node|HTMLElement} */
+        /** @type {HTMLElement} */
         var $ = node;
         var self = this;
         this.$ = node; // used for debugging. todo: remove when done.
@@ -61,7 +62,7 @@
         /**
          * Returns the first child matching the given selector
          * @param {string} selector
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          * @returns {Node|null}
          */
         this.find = function(selector, node) {
@@ -92,7 +93,7 @@
          * 'data-' automatically appended.
          * @param {string} key
          * @param {*} [val]
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          * @returns {string}
          */
         this.data = function(key, val, node) {
@@ -107,7 +108,7 @@
         /**
          * Add a class to the DOM element
          * @param {string} className
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          */
         this.addClass = function(className, node) {
             node = node || $;
@@ -120,7 +121,7 @@
         /**
          * Remove a class from the DOM element
          * @param {string} className
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          */
         this.removeClass = function(className, node) {
             node = node || $;
@@ -135,7 +136,7 @@
         /**
          * Checks to see if the DOM element has the given class name
          * @param {string} className
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          * @return {boolean}
          */
         this.hasClass = function(className, node) {
@@ -149,7 +150,7 @@
         /**
          *
          * @param {string} selector
-         * @param {node|HTMLElement} [node]
+         * @param {HTMLElement} [node]
          * @returns {boolean}
          */
         this.matches = function(selector, node) {
@@ -189,6 +190,9 @@
             } else {
                 $.attachEvent('on' + eventName, runHandler);
             }
+        };
+        this.flushCSS = function() {
+            var getOffMyChestIDE = $.offsetHeight;
         };
     };
 
@@ -281,9 +285,14 @@
             }
         };
 
-        this.transition = function(functionName, timeout) {
-            timeout = timeout || 0;
-            setTimeout(function() { self[functionName](); }, timeout);
+        this.prepareForTransition = function(transitionNext) {
+            $.addClass(CLASS.DISPLAY_NONE);
+            this.show();
+            $.flushCSS();
+            this.hide(!transitionNext);
+            $.flushCSS();
+            $.removeClass(CLASS.DISPLAY_NONE);
+            $.flushCSS();
         };
     };
     /**
@@ -294,6 +303,10 @@
         var self = this;
         /** @type {Panel} */
         this.panel = null;
+        /** @type {Panel} */
+        this.firstPanel = null;
+        /** @type {Panel} */
+        this.lastPanel = null;
         /** @type {Number} */
         this.depth = 0;
         /** @type {Node} */
@@ -344,60 +357,45 @@
             }
         }
 
-        this.next = function() {
+        /**
+         * Transitions to the next or previous panel
+         * @param {string} direction
+         */
+        function transition(direction) {
+            var transitionNext = direction == "next";
+            direction = transitionNext ? "next" : "prev";
             if (
                 self.panel.panel &&
-                self.panel.panel.next &&
+                self.panel.panel[direction] &&
                 (
                     (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
                     (self.panel.groupInDevice === "mobile" && isMobile() === false)
                 )
             ) {
-                self.panel.panel.hide(true);
-                self.panel.panel.next.show();
-                self.panel.panel = self.panel.panel.next;
-            } else if (self.panel.next) {
-                self.panel.hide(true);
-                self.panel.next.show();
-                self.panel = self.panel.next;
+                self.panel.panel[direction].prepareForTransition(transitionNext);
+                self.panel.panel.hide(transitionNext);
+                self.panel.panel[direction].show();
+                self.panel.panel = self.panel.panel[direction];
+            } else if (self.panel[direction]) {
+                self.panel[direction].prepareForTransition(transitionNext);
+                self.panel.hide(transitionNext);
+                self.panel[direction].show();
+                self.panel = self.panel[direction];
             } else {
-                self._goToStart();
+                (function(panel) {
+                    self[panel].prepareForTransition(transitionNext);
+                    self.panel.hide(transitionNext);
+                    self[panel].show();
+                    self.panel = self[panel];
+                })(transitionNext ? "firstPanel" : "lastPanel");
             }
+        }
+
+        this.next = function() {
+            transition("next");
         };
         this.prev = function() {
-            if (
-                self.panel.panel &&
-                self.panel.panel.prev &&
-                (
-                    (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
-                    (self.panel.groupInDevice === "mobile" && isMobile() === false)
-                )
-            ) {
-                self.panel.panel.hide(false);
-                self.panel.panel.prev.show();
-                self.panel.panel = self.panel.panel.prev;
-            } else if (self.panel.prev) {
-                self.panel.hide(false);
-                self.panel.prev.show();
-                self.panel = self.panel.prev;
-            } else {
-                self._goToEnd();
-            }
-        };
-        this._goToStart = function() {
-            self.removeAnimation();
-            while (self.panel.parent instanceof Panel === false && self.panel.id > 0) {
-                self.prev();
-            }
-            self.setAnimation();
-        };
-        this._goToEnd = function() {
-            self.removeAnimation();
-            // todo: make this work for nested panels as well.
-            while (self.panel.parent instanceof Panel === false && self.panel.next !== null) {
-                self.next();
-            }
-            self.setAnimation();
+            transition("prev");
         };
     };
 
@@ -488,12 +486,15 @@
 
                 // Terminal condition
                 if (panel.next == null) {
+                    root.lastPanel = panel;
                     while (panel.prev !== null) {
                         if (panel.prev.depth !== panel.depth) {
+                            root.firstPanel = panel;
                             return panel;
                         }
                         panel = panel.prev;
                     }
+                    root.firstPanel = panel;
                     return panel;
                 }
                 return a(panel.next, panel);

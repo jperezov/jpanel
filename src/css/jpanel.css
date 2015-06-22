@@ -42,6 +42,10 @@
 .jpanel-hide-right {
     left: 100%;
 }
+.jpanel-display-none {
+    display: none;
+    visibility: hidden;
+}
 /* Used solely to determine whether to use mobile or desktop JS */
 #jpanel-mobile-check {
     z-index: 1;
