@@ -5,16 +5,28 @@
     <title></title>
     <link rel="stylesheet" href="../src/css/jpanel.css"/>
     <style>
+        body, html {
+            font-family: arial, helvetica, sans-serif;
+            background: #333;
+            margin: 0;
+        }
+        div.wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 10px 40px 60px;
+            background: #f5f5f5
+        }
         div.result {
             border: 1px solid #555;
-            padding: 10px;
             margin: 25px 0 0;
+            background: #f9f9f9;
         }
         pre {
             border: 1px solid #555;
             border-top: 5px solid #5c5c5c;
             padding: 10px;
             margin: 0 0 5px;
+            white-space: pre-wrap;
         }
         pre > code {
             color: #000;
@@ -52,44 +64,49 @@
             left: 0;
             right: 0;
             background: #c5c5c5;
+            border-top: 5px solid #55F;
         }
         .fixed-footer p {
             margin: 2px;
             padding: 2px;
             max-height: 50px;
         }
-        body {
-            padding-bottom: 50px;
+        .jpanel-node:nth-child(2) {
+            background: #f0f0f0;
+        }
+        .jpanel-node {
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-<p>
-    <a href="http://jperezov.github.io/jpanel/">Click here</a> to go to jPanel's Github page.
-</p>
-<div class="fixed-footer">
-    <p>Mobile code triggered at screen widths less than 800px</p>
-    <p>Currently in <span id="desktop-or-mobile"></span> view.</p>
-</div>
-<div class="result">
-    <div class="jpanel-root" data-jp-root="default">
+<div class="wrapper">
+    <p>
+        <a href="http://jperezov.github.io/jpanel/">Click here</a> to go to jPanel's Github page.
+    </p>
+    <div class="fixed-footer">
+        <p>Mobile code triggered at screen widths less than 800px</p>
+        <p>Currently in <span id="desktop-or-mobile"></span> view.</p>
+    </div>
+    <div class="result">
+        <div class="jpanel-root" data-jp-root="default">
 
-        <div class="jpanel-node">
-            <h1>Default jPanel Usage</h1>
-            <p>
-                <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
-                <span class="jpanel-transition" data-jp-go-to="next">Next</span>
-            </p>
-        </div>
-        <div class="jpanel-node">
-            <h1>This functions as a basic slider</h1>
-            <p>
-                <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
-                <span class="jpanel-transition" data-jp-go-to="next">Next</span>
-            </p>
+            <div class="jpanel-node">
+                <h1>Default jPanel Usage</h1>
+                <p>
+                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                </p>
+            </div>
+            <div class="jpanel-node">
+                <h1>This functions as a basic slider</h1>
+                <p>
+                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                </p>
+            </div>
         </div>
     </div>
-</div>
 <pre><code><span class="com">&lt;!--Default jPanel usage--></span>
 <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-root"</span> <span class="atn">data-jp-root</span>=<span class="atv">"default"</span><span class="tag">></span>
     <span class="tag">&lt;div</span> <span class="atn">class</span>=<span class="atv">"jpanel-node"</span><span class="tag">></span>
@@ -123,20 +140,20 @@
             </p>
         </div>
         <div class="jpanel-node" data-jp-group-in-device="desktop">
-            <div class="jpanel-node">
-                <h1>While we're at it, let's group this on desktops.</h1>
-                <p class="jpanel-hide-on-desktop">
-                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
-                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
-                </p>
-            </div>
-            <div class="jpanel-node">
-                <h1>Try shrinking the window!</h1>
-                <p>
-                    <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
-                    <span class="jpanel-transition" data-jp-go-to="next">Next</span>
-                </p>
-            </div>
+                <div class="jpanel-node">
+                    <h1>While we're at it, let's group this on desktops.</h1>
+                    <p class="jpanel-hide-on-desktop">
+                        <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                        <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                    </p>
+                </div>
+                <div class="jpanel-node">
+                    <h1>Try shrinking the window!</h1>
+                    <p>
+                        <span class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+                        <span class="jpanel-transition" data-jp-go-to="next">Next</span>
+                    </p>
+                </div>
         </div>
     </div>
 </div>
@@ -169,6 +186,7 @@
     <span class="tag">&lt;/div></span>
 <span class="tag">&lt;/div></span>
 </code></pre>
+</div>
 
 <script src="../src/js/jpanel.js"></script>
 <script>
