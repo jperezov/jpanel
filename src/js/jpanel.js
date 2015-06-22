@@ -451,6 +451,7 @@
                         timers.add(function() {
                             root.init();
                             addPanels(root);
+                            root.$.flushCSS();
                             root.setAnimation();
                         });
                     })(self.root[rootName]);
