@@ -5,9 +5,10 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! jPanel <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                banner: '/**!\n * jPanel v<%= pkg.version %>\n * Copyright (c) 2015 Jonathan Perez.\n * Licensed under the MIT License.\n */\n'
             },
             dist: {
                 files: {
