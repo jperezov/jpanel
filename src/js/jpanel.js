@@ -410,7 +410,7 @@
             (function runNext() {
                 if (timers.timers.length > 0) {
                     for (var i = 0; i < timers.timers.length; i++) {
-                        if (!!timers.timers[i]() == false) {
+                        if (timers.timers[i]() === undefined) {
                             timers.timers.splice(i, 1);
                             i--;
                         }
@@ -439,6 +439,18 @@
             var roots = document.querySelectorAll(SEL.ROOT);
             var rootCount = 0;
             if (roots.length === 0) return false;
+            /**
+             * Initializes a given jPanel root.
+             * @param root
+             */
+            function initRoot(root) {
+                timers.add(function() {
+                    root.init();
+                    addPanels(root);
+                    root.$.flushCSS();
+                    root.setAnimation();
+                });
+            }
             for (var rKey in roots) {
                 if (roots.hasOwnProperty(rKey) && rKey != "length") {
                     /** @type {Node} */
@@ -447,14 +459,7 @@
                     // todo: make sure this name-conflict-preventor thing works.
                     if (self.root[rootName]) rootName += rootCount;
                     self.root[rootName] = new Root(rootNode);
-                    (function(root) {
-                        timers.add(function() {
-                            root.init();
-                            addPanels(root);
-                            root.$.flushCSS();
-                            root.setAnimation();
-                        });
-                    })(self.root[rootName]);
+                    initRoot(self.root[rootName]);
                 }
             }
             timers.start();
@@ -486,7 +491,7 @@
                 }
 
                 // Terminal condition
-                if (panel.next == null) {
+                if (panel.next === null) {
                     root.lastPanel = panel;
                     while (panel.prev !== null) {
                         if (panel.prev.depth !== panel.depth) {
