@@ -7,14 +7,14 @@
     <style>
         body, html {
             font-family: arial, helvetica, sans-serif;
-            background: #333;
+            background: #212121;
             margin: 0;
         }
         div.wrapper {
             max-width: 900px;
             margin: 0 auto;
-            padding: 10px 40px 60px;
-            background: #f5f5f5
+            padding: 10px 40px 70px;
+            background: #f2f2f2
         }
         div.result {
             border: 1px solid #555;
@@ -63,8 +63,10 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #c5c5c5;
+            background: #f2f2f2;
             border-top: 5px solid #55F;
+            padding: 5px;
+            z-index: 1000;
         }
         .fixed-footer p {
             margin: 2px;
@@ -194,7 +196,9 @@
         var Jpanel = window.Jpanel;
         var mobileDesktopDisplay = document.getElementById("desktop-or-mobile");
         document.body.onresize = function() {
-            mobileDesktopDisplay.innerHTML = Jpanel.isMobile() ? "mobile" : "desktop";
+            var isMobile = Jpanel.isMobile();
+            mobileDesktopDisplay.innerHTML = isMobile ? "mobile" : "desktop";
+            mobileDesktopDisplay.style.color = isMobile? "#00aa00" : "#aa0000"
         };
         document.body.onresize();
     })();

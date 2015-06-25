@@ -1,4 +1,5 @@
-/**
+/**!
+ * jPanel Library
  * Copyright (c) 2015 Jonathan Perez.
  * Licensed under the MIT License.
  */
