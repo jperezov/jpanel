@@ -4,7 +4,7 @@ A lightweight library for panel-like navigation. Makes use of HTML5 data-* attri
 
 [Click here](http://jperezov.github.io/jpanel/examples/) to view examples.
 
-##Required Classes
+##Required Class Names
  - **jpanel-root**
     - Used to mark an element as a jPanel root. This is the wrapper for any individual jPanel navigator.
  - **jpanel-node**
