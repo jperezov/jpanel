@@ -1,8 +1,6 @@
-#jPanel Library v0.0.1
+#jPanel Library v0.1.0
 
-A lightweight, jQuery-dependant library for panel-like navigation. Makes use of HTML5 data-* attributes to allow for customization without writing any javascript.
-
-Currently not fit for use in production environments.
+A lightweight library for panel-like navigation. Makes use of HTML5 data-* attributes to allow for customization without writing any javascript.
 
 ##Required Classes
  - **jpanel-root**
