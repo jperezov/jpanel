@@ -15,7 +15,7 @@ A lightweight library for panel-like navigation. Makes use of HTML5 data-* attri
 ##Options
  - **data-jp-root**
     - **values:** Any, but it is best if the names do not conflict if you plan on customizing jPanel with javascript.
-    - **default:** If this field is ommitted, a number equal to its numerical position in the DOM is used.
+    - **default:** If this field is omitted, a number equal to its numerical position in the DOM is used.
     - **description:** Used to name a jPanel root. Accessible via `Jpanel["root-name"]` in your javascript code.
   - **data-jp-slide-axis**
     - **values:** x | y
@@ -29,7 +29,7 @@ A lightweight library for panel-like navigation. Makes use of HTML5 data-* attri
     - **values:** desktop | mobile
     - **description:** Will group one or more panels on a given device. Most common usage is to display two panels in desktop / tablets, but only show the individual panels on smaller devices.
   - **data-jp-go-to**
-    - **values:** prev | next | #
+    - **values:** prev | next
     - **default:** next
     - **description:** Used for next / previous / specific panel navigation. Only works on elements with `class="jpanel-transition"`.
 
