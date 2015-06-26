@@ -5,30 +5,30 @@ A lightweight library for panel-like navigation. Makes use of HTML5 data-* attri
 [Click here](http://jperezov.github.io/jpanel/examples/) to view examples.
 
 ##Required Class Names
- - **jpanel-root**
+- **jpanel-root**
     - Used to mark an element as a jPanel root. This is the wrapper for any individual jPanel navigator.
- - **jpanel-node**
+- **jpanel-node**
     - Used to mark an element as a jPanel node. Each node _must_ have this class to be recognized by jPanel as a node.
- - **jpanel-transition**
+- **jpanel-transition**
     - Used on elements that may be clicked to navigate through the jPanel panels. Requires the use of the `data-jp-go-to` attribute to move to any panel other than the next panel.
 
 ##Options
- - **data-jp-root**
+- **data-jp-root**
     - **values:** Any, but it is best if the names do not conflict if you plan on customizing jPanel with javascript.
     - **default:** If this field is omitted, a number equal to its numerical position in the DOM is used.
     - **description:** Used to name a jPanel root. Accessible via `Jpanel["root-name"]` in your javascript code.
-  - **data-jp-slide-axis**
+- **data-jp-slide-axis**
     - **values:** x | y
     - **default:** x
     - **description:** The axis for the slide animations. Allows for left-to-right or top-down animations.
-  - **data-jp-initial-position**
+- **data-jp-initial-position**
     - **values:** left | right | top | bottom
     - **default:** left (if `data-slide-axis="x"`), top (if `data-slide-axis="y"`)
     - **description:** Where the panel will slide from. Make sure that this matches the slide-axis (e.g. left or right for `data-slide-axis="x"`, top or bottom for `data-slide-axis="y"`)
-  - **data-jp-group-in-device**
+- **data-jp-group-in-device**
     - **values:** desktop | mobile
     - **description:** Will group one or more panels on a given device. Most common usage is to display two panels in desktop / tablets, but only show the individual panels on smaller devices.
-  - **data-jp-go-to**
+- **data-jp-go-to**
     - **values:** prev | next
     - **default:** next
     - **description:** Used for next / previous / specific panel navigation. Only works on elements with `class="jpanel-transition"`.
