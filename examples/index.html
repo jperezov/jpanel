@@ -193,10 +193,10 @@
 <script src="../dist/js/jpanel.min.js"></script>
 <script>
     (function() {
-        var Jpanel = window.Jpanel;
+        var jPanel = window.jPanel;
         var mobileDesktopDisplay = document.getElementById("desktop-or-mobile");
         document.body.onresize = function() {
-            var isMobile = Jpanel.isMobile();
+            var isMobile = jPanel.isMobile();
             mobileDesktopDisplay.innerHTML = isMobile ? "mobile" : "desktop";
             mobileDesktopDisplay.style.color = isMobile? "#00aa00" : "#aa0000"
         };
