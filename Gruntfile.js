@@ -4,7 +4,11 @@
 
 module.exports = function(grunt) {
 
+    grunt.loadNpmTasks('intern');
+
     var pkg = grunt.file.readJSON('package.json');
+    // Make your own sauce account for this to work.
+    var sauce = grunt.file.readJSON('sauce.json');
     grunt.initConfig({
         pkg: pkg,
         requirejs: {
@@ -42,6 +46,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+        cssmin: {
+            target: {
+                files: {
+                    'dist/css/jpanel.min.css': ['src/css/jpanel.css']
+                }
+            }
+        },
         jshint: {
             files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
             options: {
@@ -54,10 +65,15 @@ module.exports = function(grunt) {
                 }
             }
         },
-        cssmin: {
-            target: {
-                files: {
-                    'dist/css/jpanel.min.css': ['src/css/jpanel.css']
+        intern: {
+            tests: {
+                options: {
+                    runType: 'runner',
+                    config: 'tests/intern',
+                    reporters: [ 'Console' ],
+                    suites: [ 'tests/unit/all', 'tests/functional/jpanel' ],
+                    sauceUsername: sauce.username,
+                    sauceAccessKey: sauce.accessKey
                 }
             }
         }
@@ -74,40 +90,38 @@ module.exports = function(grunt) {
      * @param {String} path
      * @param {String} contents The contents to be written (including their AMD wrappers)
      */
-    function convert( name, path, contents ) {
+    function convert(name, path, contents) {
         var rdefineEnd = /\}\s*?\);[^}\w]*$/;
-        var amdName;
         // Convert var modules
         if ( /.\/var\//.test( path ) ) {
             contents = contents
-                .replace( /define\([\w\W]*?return/, "    var " + (/var\/([\w-]+)/.exec(name)[1]) + " =" )
-                .replace( rdefineEnd, "" )
-                .replace( /\/\*\*/, "    \/**")
-                .replace( /\s\*\s/g, "     * ")
-                .replace( /\s\*\//g, "     */");
+                .replace(/define\([\w\W]*?return/, "    var " + (/var\/([\w-]+)/.exec(name)[1]) + " =")
+                .replace(rdefineEnd, "")
+                .replace(/\/\*\*/, "    \/**")
+                .replace(/\s\*\s/g, "     * ")
+                .replace(/\s\*\//g, "     */");
         } else {
-
             contents = contents
-                .replace( /\s*return\s+[^\}]+(\}\s*?\);[^\w\}]*)$/, "$1" )
+                .replace(/\s*return\s+[^\}]+(\}\s*?\);[^\w\}]*)$/, "$1")
                 // Multiple exports
-                .replace( /\s*exports\.\w+\s*=\s*\w+;/g, "" );
+                .replace(/\s*exports\.\w+\s*=\s*\w+;/g, "");
 
             // Remove define wrappers, closure ends, and empty declarations
             contents = contents
-                .replace( /define\([^{]*?{/, "" )
-                .replace( rdefineEnd, "" );
+                .replace(/define\([^{]*?{/, "")
+                .replace(rdefineEnd, "");
 
             // Remove anything wrapped with
             // /* ExcludeStart */ /* ExcludeEnd */
             // or a single line directly after a // BuildExclude comment
             contents = contents
-                .replace( /\/\*\s*ExcludeStart\s*\*\/[\w\W]*?\/\*\s*ExcludeEnd\s*\*\//ig, "" )
-                .replace( /\/\/\s*BuildExclude\n\r?[\w\W]*?\n\r?/ig, "" );
+                .replace(/\/\*\s*ExcludeStart\s*\*\/[\w\W]*?\/\*\s*ExcludeEnd\s*\*\//ig, "")
+                .replace(/\/\/\s*BuildExclude\n\r?[\w\W]*?\n\r?/ig, "");
 
             // Remove empty definitions
             contents = contents
-                .replace( /define\(\[[^\]]*\]\)[\W\n]+$/, "" )
-                .replace( /@VERSION/, pkg.version );
+                .replace(/define\(\[[^\]]*\]\)[\W\n]+$/, "")
+                .replace(/@VERSION/, pkg.version);
         }
         return contents;
     }
@@ -116,9 +130,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('intern');
 
     grunt.registerTask('test', [
-        'jshint'
+        'jshint',
+        'intern'
     ]);
 
     grunt.registerTask('default', [
