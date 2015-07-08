@@ -20,7 +20,7 @@ define([
          */
         this.find = function(selector, node) {
             node = node || $;
-            var element = node.querySelectorAll(selector)[0];
+            var element = node.querySelector(selector);
             return element ? new Node(element) : null;
         };
         /**
@@ -35,11 +35,11 @@ define([
             do {
                 sibling = sibling.nextSibling;
             } while (
-            sibling &&
-            sibling.nodeType !== 1 &&
-            self.hasClass(findClass, sibling) === false
-                );
-            return sibling ? new Node(sibling) : null;
+                sibling &&
+                sibling.nodeType !== 1 &&
+                self.hasClass(findClass, sibling) === false
+            );
+            return sibling && self.hasClass(findClass, sibling) ? new Node(sibling) : null;
         };
         /**
          * Get or set custom data attributes.

@@ -41,6 +41,7 @@ define([
             }
             timers.start();
         },
+        // todo: fill this out
         initializeOn: function(initCondition) {
             var initConditions = {
                 immediate: function() {
