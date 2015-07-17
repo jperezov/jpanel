@@ -62,8 +62,8 @@ define([
          * @returns {boolean}
          */
         this.transitionContents = function(isMobile) {
-            if (self.groupInDevice == "desktop") return isMobile;
-            else if (self.groupInDevice == "mobile") return !isMobile;
+            if (self.groupInDevice === "desktop") return isMobile;
+            else if (self.groupInDevice === "mobile") return !isMobile;
             return false;
         };
 

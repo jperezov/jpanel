@@ -69,43 +69,35 @@ define([
 
         /**
          * Transitions to the next or previous panel
+         * todo: fix sub-panel transitions on infinite scrolling
          * @param {string} direction
+         * @param {Root|Panel} root
          */
-        function transition(direction) {
-            var transitionNext = direction == "next";
+        function transition(direction, root) {
+            var transitionNext = direction === "next";
             direction = transitionNext ? "next" : "prev";
-            if (
-                self.panel.panel &&
-                self.panel.panel[direction] &&
-                (
-                    (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
-                    (self.panel.groupInDevice === "mobile" && isMobile() === false)
-                )
-            ) {
-                self.panel.panel[direction].prepareForTransition(transitionNext);
-                self.panel.panel.hide(transitionNext);
-                self.panel.panel[direction].show();
-                self.panel.panel = self.panel.panel[direction];
-            } else if (self.panel[direction]) {
-                self.panel[direction].prepareForTransition(transitionNext);
-                self.panel.hide(transitionNext);
-                self.panel[direction].show();
-                self.panel = self.panel[direction];
+            if (root.panel.panel && root.panel.panel[direction] && root.panel.transitionContents(isMobile())) {
+                transition(direction, root.panel);
+            } else if (root.panel[direction]) {
+                root.panel[direction].prepareForTransition(transitionNext);
+                root.panel.hide(transitionNext);
+                root.panel[direction].show();
+                root.panel = root.panel[direction];
             } else {
                 (function(panel) {
-                    self[panel].prepareForTransition(transitionNext);
-                    self.panel.hide(transitionNext);
-                    self[panel].show();
-                    self.panel = self[panel];
+                    root[panel].prepareForTransition(transitionNext);
+                    root.panel.hide(transitionNext);
+                    root[panel].show();
+                    root.panel = root[panel];
                 })(transitionNext ? "firstPanel" : "lastPanel");
             }
         }
 
         this.next = function() {
-            transition("next");
+            transition("next", self);
         };
         this.prev = function() {
-            transition("prev");
+            transition("prev", self);
         };
     };
 
