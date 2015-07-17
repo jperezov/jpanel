@@ -37,20 +37,26 @@ define([
             self.depth = +self.parent.depth + 1;
         }
         function setGroupInDevice() {
+            var key = $.data(DATA.GROUP_IN_DEVICE);
+            var groupInDevice = {
+                mobile: "mobile",
+                desktop: "desktop"
+            };
             /** @type {String} */
-            self.groupInDevice = $.data(DATA.GROUP_IN_DEVICE) == "desktop" ? "desktop" : "mobile";
+            self.groupInDevice = groupInDevice[key] || null;
         }
         function setSlideAxis() {
+            var key = $.data(DATA.SLIDE_AXIS).match(/^y$/i);
+            var slideAxis = {
+                x: "x",
+                y: "y"
+            };
             /** @type {String} */
-            self.slideAxis = $.data(DATA.SLIDE_AXIS).match(/^y$/i) ?
-                "y" :
-                (self.parent.slideAxis == "y" ?
-                    "y" :
-                    "x");
+            self.slideAxis =  slideAxis[key] || self.parent.slideAxis;
         }
         function setInitialPosition() {
             /** @type {String} */
-            self.initialPosition = self.slideAxis == "y" ? "top" : "right";
+            self.initialPosition = self.slideAxis === "y" ? "top" : "right";
             if (self.id > 0) {
                 $.addClass(CLASS.HIDE.PREFIX + self.initialPosition);
             }
