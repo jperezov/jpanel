@@ -339,7 +339,9 @@
             $.removeClass(CLASS.HIDE.TOP);
             $.removeClass(CLASS.HIDE.BOTTOM);
         };
-
+        /**
+         * @param {boolean} transitionNext
+         */
         this.hide = function(transitionNext) {
             switch (self.initialPosition) {
                 case "top":
@@ -356,7 +358,10 @@
                     break;
             }
         };
-
+        /**
+         * Appropriately positions the next or previous panel
+         * @param {boolean} transitionNext
+         */
         this.prepareForTransition = function(transitionNext) {
             $.addClass(CLASS.DISPLAY_NONE);
             this.show();
@@ -364,6 +369,23 @@
             this.hide(!transitionNext);
             $.flushCSS();
             $.removeClass(CLASS.DISPLAY_NONE);
+            $.flushCSS();
+        };
+        /**
+         * Resets positions of sub-panels before transitioning to their containers
+         * @param transitionNext
+         */
+        this.resetSubPanels = function(transitionNext) {
+            if (self.panel === null) return;
+            var stopCondition = transitionNext? "id" : "next";
+            var oppositeDirection = transitionNext? "prev" : "next";
+            while (self.panel[stopCondition]) {
+                self.panel.resetSubPanels(transitionNext);
+                self.panel.hide(transitionNext);
+                $.flushCSS();
+                self.panel = self.panel[oppositeDirection];
+            }
+            self.panel.show();
             $.flushCSS();
         };
     };
@@ -449,7 +471,6 @@
 
         /**
          * Transitions to the next or previous panel
-         * todo: fix sub-panel transitions on infinite scrolling
          * @param {string} direction
          * @param {Root|Panel} root
          */
@@ -459,12 +480,14 @@
             if (root.panel.panel && root.panel.panel[direction] && root.panel.transitionContents(isMobile())) {
                 transition(direction, root.panel);
             } else if (root.panel[direction]) {
+                root.panel[direction].resetSubPanels(transitionNext);
                 root.panel[direction].prepareForTransition(transitionNext);
                 root.panel.hide(transitionNext);
                 root.panel[direction].show();
                 root.panel = root.panel[direction];
             } else {
                 (function(panel) {
+                    root[panel].resetSubPanels(transitionNext);
                     root[panel].prepareForTransition(transitionNext);
                     root.panel.hide(transitionNext);
                     root[panel].show();

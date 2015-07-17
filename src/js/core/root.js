@@ -69,7 +69,6 @@ define([
 
         /**
          * Transitions to the next or previous panel
-         * todo: fix sub-panel transitions on infinite scrolling
          * @param {string} direction
          * @param {Root|Panel} root
          */
@@ -79,12 +78,14 @@ define([
             if (root.panel.panel && root.panel.panel[direction] && root.panel.transitionContents(isMobile())) {
                 transition(direction, root.panel);
             } else if (root.panel[direction]) {
+                root.panel[direction].resetSubPanels(transitionNext);
                 root.panel[direction].prepareForTransition(transitionNext);
                 root.panel.hide(transitionNext);
                 root.panel[direction].show();
                 root.panel = root.panel[direction];
             } else {
                 (function(panel) {
+                    root[panel].resetSubPanels(transitionNext);
                     root[panel].prepareForTransition(transitionNext);
                     root.panel.hide(transitionNext);
                     root[panel].show();

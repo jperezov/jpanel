@@ -80,7 +80,9 @@ define([
             $.removeClass(CLASS.HIDE.TOP);
             $.removeClass(CLASS.HIDE.BOTTOM);
         };
-
+        /**
+         * @param {boolean} transitionNext
+         */
         this.hide = function(transitionNext) {
             switch (self.initialPosition) {
                 case "top":
@@ -97,7 +99,10 @@ define([
                     break;
             }
         };
-
+        /**
+         * Appropriately positions the next or previous panel
+         * @param {boolean} transitionNext
+         */
         this.prepareForTransition = function(transitionNext) {
             $.addClass(CLASS.DISPLAY_NONE);
             this.show();
@@ -105,6 +110,23 @@ define([
             this.hide(!transitionNext);
             $.flushCSS();
             $.removeClass(CLASS.DISPLAY_NONE);
+            $.flushCSS();
+        };
+        /**
+         * Resets positions of sub-panels before transitioning to their containers
+         * @param transitionNext
+         */
+        this.resetSubPanels = function(transitionNext) {
+            if (self.panel === null) return;
+            var stopCondition = transitionNext? "id" : "next";
+            var oppositeDirection = transitionNext? "prev" : "next";
+            while (self.panel[stopCondition]) {
+                self.panel.resetSubPanels(transitionNext);
+                self.panel.hide(transitionNext);
+                $.flushCSS();
+                self.panel = self.panel[oppositeDirection];
+            }
+            self.panel.show();
             $.flushCSS();
         };
     };
