@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Tests</title>
+    <link rel="stylesheet" href="../dist/css/jpanel.min.css"/>
+    <style>
+        .fixed {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="jpanel-root" data-jp-root="default">
+    <div class="jpanel-node" id="1">
+        <h1>Panel 1</h1>
+    </div>
+    <div class="jpanel-node" id="2">
+        <h1>Panel 2</h1>
+    </div>
+    <div class="jpanel-node" id="3">
+        <h1>Panel 3</h1>
+    </div>
+    <div class="fixed">
+        <span id="prev" class="jpanel-transition" data-jp-go-to="prev">Previous</span>
+        <span id="next" class="jpanel-transition" data-jp-go-to="next">Next</span>
+    </div>
+</div>
+<script src="../dist/js/jpanel.min.js"></script>
+</body>
+</html>
