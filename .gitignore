@@ -1,3 +1,5 @@
 .idea/
 node_modules/
 sauce.json
+sauce_username.txt
+sauce_access_key.txt

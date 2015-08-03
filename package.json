@@ -29,7 +29,8 @@
     "intern": "^2.2.2"
   },
   "scripts": {
-    "test": "./node_modules/.bin/intern-client config=tests/intern"
+    "start": "sauce_connect",
+    "test": "intern-runner config=tests/intern"
   },
   "main": "jpanel.js",
   "repository": {

@@ -7,8 +7,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('intern');
 
     var pkg = grunt.file.readJSON('package.json');
-    // Make your own sauce account for this to work.
-    var sauce = grunt.file.readJSON('sauce.json');
+
     grunt.initConfig({
         pkg: pkg,
         requirejs: {
@@ -62,18 +61,6 @@ module.exports = function(grunt) {
                     console: true,
                     module: true,
                     document: true
-                }
-            }
-        },
-        intern: {
-            tests: {
-                options: {
-                    runType: 'runner',
-                    config: 'tests/intern',
-                    reporters: [ 'Console' ],
-                    suites: [ 'tests/unit/all', 'tests/functional/jpanel' ],
-                    sauceUsername: sauce.username,
-                    sauceAccessKey: sauce.accessKey
                 }
             }
         }
