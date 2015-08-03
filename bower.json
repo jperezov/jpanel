@@ -1,0 +1,27 @@
+{
+  "name": "jPanel",
+  "version": "0.2.0",
+  "homepage": "https://github.com/jperezov/jpanel",
+  "authors": [
+    "Jonathan Perez <jonathan@bluecranegames.com>"
+  ],
+  "description": "Responsive paneling library for JS navigation which requires different mobile and desktop experiences.",
+  "main": "jpanel.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "frontend",
+    "slides",
+    "slideshow",
+    "javascript-navigation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -14,10 +14,10 @@
     }
   ],
   "keywords": [
-    "jquery-plugin",
     "frontend",
     "slides",
-    "slideshow"
+    "slideshow",
+    "javascript-navigation"
   ],
   "dependencies": {},
   "devDependencies": {
