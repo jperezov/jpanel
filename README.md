@@ -1,4 +1,4 @@
-#jPanel Library v0.1.0
+#jPanel Library v0.2.0
 
 A lightweight library for panel-like navigation. Makes use of HTML5 data-* attributes to allow for customization without writing any javascript.
 

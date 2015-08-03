@@ -1,12 +1,11 @@
 /**!
- * jPanel Library
+ * jPanel v0.2.0
  * Copyright (c) 2015 Jonathan Perez.
  * Licensed under the MIT License.
  */
-
 (function() {
     /**
-     * Class Constants
+     * Class name constants
      * @const
      */
     var CLASS = {
@@ -26,8 +25,9 @@
         },
         DISPLAY_NONE: 'jpanel-display-none'
     };
+
     /**
-     * Selector Constants
+     * Selector constants
      * @const
      */
     var SEL = {
@@ -35,8 +35,9 @@
         NODE: '.' + CLASS.NODE,
         TRANSITION: '.' + CLASS.TRANSITION
     };
+
     /**
-     * Data Constants
+     * Data attr constants
      * @const
      */
     var DATA = {
@@ -48,6 +49,69 @@
         TRANSITION_TIMER: 'jp-transition-timer',
         GO_TO: 'jp-go-to'
     };
+
+    var document = window.document;
+
+    /**
+     * Timer object
+     */
+    var timers = {
+        timerID: 0,
+        timers: [],
+        add: function(fn) {
+            this.timers.push(fn);
+        },
+        start: function() {
+            if (this.timerID) return;
+            var self = this;
+            (function runNext() {
+                if (self.timers.length > 0) {
+                    for (var i = 0; i < self.timers.length; i++) {
+                        if (self.timers[i]() === undefined) {
+                            self.timers.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    self.timerID = setTimeout(runNext, 0);
+                }
+            })();
+        },
+        stop: function() {
+            clearTimeout(this.timerID);
+            this.timerID = 0;
+        }
+    };
+
+
+
+    var version = "0.2.0";
+    var jPanel = function() {
+        //
+    };
+    jPanel.fn = jPanel.prototype = {
+        jpanel: version,
+        constructor: jPanel,
+        modules: [] // Array of included modules
+    };
+    jPanel.extend = jPanel.fn.extend = function(obj) {
+        var name, src, copy;
+        if (obj !== null) {
+            for (name in obj) {
+                src = this[name];
+                copy = obj[name];
+                if (this === copy) {
+                    continue;
+                }
+                if (copy !== undefined) {
+                    this[name] = copy;
+                }
+            }
+        }
+        return this;
+    };
+    jPanel.extend({
+        root: {}
+    });
 
     /**
      * Custom wrapper for HTML DOM elements
@@ -68,7 +132,7 @@
          */
         this.find = function(selector, node) {
             node = node || $;
-            var element = node.querySelectorAll(selector)[0];
+            var element = node.querySelector(selector);
             return element ? new Node(element) : null;
         };
         /**
@@ -87,7 +151,7 @@
                 sibling.nodeType !== 1 &&
                 self.hasClass(findClass, sibling) === false
             );
-            return sibling ? new Node(sibling) : null;
+            return sibling && self.hasClass(findClass, sibling) ? new Node(sibling) : null;
         };
         /**
          * Get or set custom data attributes.
@@ -197,6 +261,7 @@
         };
     };
 
+
     /**
      * @param {Node} [$]
      * @param {Panel|Root} [parent]
@@ -231,20 +296,26 @@
             self.depth = +self.parent.depth + 1;
         }
         function setGroupInDevice() {
+            var key = $.data(DATA.GROUP_IN_DEVICE);
+            var groupInDevice = {
+                mobile: "mobile",
+                desktop: "desktop"
+            };
             /** @type {String} */
-            self.groupInDevice = $.data(DATA.GROUP_IN_DEVICE) == "desktop" ? "desktop" : "mobile";
+            self.groupInDevice = groupInDevice[key] || null;
         }
         function setSlideAxis() {
+            var key = $.data(DATA.SLIDE_AXIS).match(/^y$/i);
+            var slideAxis = {
+                x: "x",
+                y: "y"
+            };
             /** @type {String} */
-            self.slideAxis = $.data(DATA.SLIDE_AXIS).match(/^y$/i) ?
-                "y" :
-                (self.parent.slideAxis == "y" ?
-                    "y" :
-                    "x");
+            self.slideAxis =  slideAxis[key] || self.parent.slideAxis;
         }
         function setInitialPosition() {
             /** @type {String} */
-            self.initialPosition = self.slideAxis == "y" ? "top" : "right";
+            self.initialPosition = self.slideAxis === "y" ? "top" : "right";
             if (self.id > 0) {
                 $.addClass(CLASS.HIDE.PREFIX + self.initialPosition);
             }
@@ -256,8 +327,8 @@
          * @returns {boolean}
          */
         this.transitionContents = function(isMobile) {
-            if (self.groupInDevice == "desktop") return isMobile;
-            else if (self.groupInDevice == "mobile") return !isMobile;
+            if (self.groupInDevice === "desktop") return isMobile;
+            else if (self.groupInDevice === "mobile") return !isMobile;
             return false;
         };
 
@@ -268,7 +339,9 @@
             $.removeClass(CLASS.HIDE.TOP);
             $.removeClass(CLASS.HIDE.BOTTOM);
         };
-
+        /**
+         * @param {boolean} transitionNext
+         */
         this.hide = function(transitionNext) {
             switch (self.initialPosition) {
                 case "top":
@@ -285,7 +358,10 @@
                     break;
             }
         };
-
+        /**
+         * Appropriately positions the next or previous panel
+         * @param {boolean} transitionNext
+         */
         this.prepareForTransition = function(transitionNext) {
             $.addClass(CLASS.DISPLAY_NONE);
             this.show();
@@ -295,7 +371,42 @@
             $.removeClass(CLASS.DISPLAY_NONE);
             $.flushCSS();
         };
+        /**
+         * Resets positions of sub-panels before transitioning to their containers
+         * @param transitionNext
+         */
+        this.resetSubPanels = function(transitionNext) {
+            if (self.panel === null) return;
+            var stopCondition = transitionNext? "id" : "next";
+            var oppositeDirection = transitionNext? "prev" : "next";
+            while (self.panel[stopCondition]) {
+                self.panel.resetSubPanels(transitionNext);
+                self.panel.hide(transitionNext);
+                $.flushCSS();
+                self.panel = self.panel[oppositeDirection];
+            }
+            self.panel.show();
+            $.flushCSS();
+        };
     };
+    var getComputedStyle = window.getComputedStyle;
+
+
+
+    var isMobile = jPanel.isMobile = (function() {
+        // todo: add a check to see if #jpanel-mobile-check already exists
+        document.body.insertAdjacentHTML('afterend', '<span id="jpanel-mobile-check"></span>');
+        var mobileNode = document.getElementById("jpanel-mobile-check");
+        return function() {
+            if (getComputedStyle) {
+                return +getComputedStyle(mobileNode, null).getPropertyValue('z-index') === 2;
+            } else if (mobileNode.currentStyle){
+                return +mobileNode.currentStyle.zIndex === 2;
+            }
+        };
+    })();
+
+
     /**
      * @param {Node} $
      * @constructor
@@ -361,81 +472,41 @@
         /**
          * Transitions to the next or previous panel
          * @param {string} direction
+         * @param {Root|Panel} root
          */
-        function transition(direction) {
-            var transitionNext = direction == "next";
+        function transition(direction, root) {
+            var transitionNext = direction === "next";
             direction = transitionNext ? "next" : "prev";
-            if (
-                self.panel.panel &&
-                self.panel.panel[direction] &&
-                (
-                    (self.panel.groupInDevice === "desktop" && isMobile() === true) ||
-                    (self.panel.groupInDevice === "mobile" && isMobile() === false)
-                )
-            ) {
-                self.panel.panel[direction].prepareForTransition(transitionNext);
-                self.panel.panel.hide(transitionNext);
-                self.panel.panel[direction].show();
-                self.panel.panel = self.panel.panel[direction];
-            } else if (self.panel[direction]) {
-                self.panel[direction].prepareForTransition(transitionNext);
-                self.panel.hide(transitionNext);
-                self.panel[direction].show();
-                self.panel = self.panel[direction];
+            if (root.panel.panel && root.panel.panel[direction] && root.panel.transitionContents(isMobile())) {
+                transition(direction, root.panel);
+            } else if (root.panel[direction]) {
+                root.panel[direction].resetSubPanels(transitionNext);
+                root.panel[direction].prepareForTransition(transitionNext);
+                root.panel.hide(transitionNext);
+                root.panel[direction].show();
+                root.panel = root.panel[direction];
             } else {
                 (function(panel) {
-                    self[panel].prepareForTransition(transitionNext);
-                    self.panel.hide(transitionNext);
-                    self[panel].show();
-                    self.panel = self[panel];
+                    root[panel].resetSubPanels(transitionNext);
+                    root[panel].prepareForTransition(transitionNext);
+                    root.panel.hide(transitionNext);
+                    root[panel].show();
+                    root.panel = root[panel];
                 })(transitionNext ? "firstPanel" : "lastPanel");
             }
         }
 
         this.next = function() {
-            transition("next");
+            transition("next", self);
         };
         this.prev = function() {
-            transition("prev");
+            transition("prev", self);
         };
     };
 
-    var timers = {
-        timerID: 0,
-        timers: [],
-        add: function(fn) {
-            this.timers.push(fn);
-        },
-        start: function() {
-            if (this.timerID) return;
-            (function runNext() {
-                if (timers.timers.length > 0) {
-                    for (var i = 0; i < timers.timers.length; i++) {
-                        if (timers.timers[i]() === undefined) {
-                            timers.timers.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    timers.timerID = setTimeout(runNext, 0);
-                }
-            })();
-        },
-        stop: function() {
-            clearTimeout(this.timerID);
-            this.timerID = 0;
-        }
-    };
 
-    /** @constructor */
-    var Jpanel = function() {
-        var self = this;
-        /**
-         * A list of roots. <i>Not</i> an array.
-         * @type {Root[]}
-         */
-        this.root = {};
-
-        this.init = function() {
+    jPanel.extend({
+        init: function() {
             //
             var roots = document.querySelectorAll(SEL.ROOT);
             var rootCount = 0;
@@ -458,66 +529,23 @@
                     var rootNode = new Node(roots[rKey]);
                     var rootName = rootNode.data(DATA.ROOT) || rootCount++;
                     // todo: make sure this name-conflict-preventor thing works.
-                    if (self.root[rootName]) rootName += rootCount;
-                    self.root[rootName] = new Root(rootNode);
-                    initRoot(self.root[rootName]);
+                    if (this.root[rootName]) rootName += rootCount;
+                    this.root[rootName] = new Root(rootNode);
+                    initRoot(this.root[rootName]);
                 }
             }
             timers.start();
-        };
-
-        //todo: add timers to separate out each panel addition
-        /**
-         * Adds a panel group based on the jpanel-root name.
-         * @param {Root} root
-         */
-        function addPanels(root) {
-            /**
-             * Add all the panels
-             * @param {Panel} panel
-             * @param {Panel} prev
-             */
-            root.panel = (function a(panel, prev) {
-                panel.id = prev? prev.id + 1 : 0;
-                panel.init();
-
-                var nextPanel = panel.$.next(CLASS.NODE);
-                panel.prev = prev;
-                panel.next = nextPanel ? new Panel(nextPanel, panel.parent) : null;
-
-                // Add sub-panels if appropriate
-                var subPanel = panel.$.find(SEL.NODE) || null;
-                if (subPanel) {
-                    panel.panel = a(new Panel(subPanel, panel), null);
-                }
-
-                // Terminal condition
-                if (panel.next === null) {
-                    root.lastPanel = panel;
-                    while (panel.prev !== null) {
-                        if (panel.prev.depth !== panel.depth) {
-                            root.firstPanel = panel;
-                            return panel;
-                        }
-                        panel = panel.prev;
-                    }
-                    root.firstPanel = panel;
-                    return panel;
-                }
-                return a(panel.next, panel);
-            })(new Panel(root.$.find(SEL.NODE), root), null);
-        }
-
-        // todo: figure this out.
-        this.initializeOn = function(initCondition) {
+        },
+        // todo: fill this out
+        initializeOn: function(initCondition) {
             var initConditions = {
                 immediate: function() {
                     //
                 },
-                onLoad: function() {
+                load: function() {
                     //
                 },
-                onRender: function() {
+                render: function() {
                     //
                 },
                 custom: function() {
@@ -529,39 +557,57 @@
             } else {
                 initConditions.immediate();
             }
-        };
-    };
-
-    /**
-     * Throws an alert for our library
-     * todo: only throw an alert if in "dev" mode. Add "dev" mode.
-     * @param err
-     */
-    function throwAlert(err) {
-        if (console !== undefined && typeof console.log == "function") {
-            console.log("jPanel error: " + err);
-        } else {
-            // todo: Add this back once I add in "dev" mode.
-            //alert("jPanel error: " + err);
         }
+    });
+
+    function addPanels(root) {
+        /**
+         * Add all the panels
+         * @param {Panel} panel
+         * @param {Panel} prev
+         */
+        root.panel = (function a(panel, prev) {
+            panel.id = prev? prev.id + 1 : 0;
+            panel.init();
+
+            var nextPanel = panel.$.next(CLASS.NODE);
+            panel.prev = prev;
+            panel.next = nextPanel ? new Panel(nextPanel, panel.parent) : null;
+
+            // Add sub-panels if appropriate
+            var subPanel = panel.$.find(SEL.NODE) || null;
+            if (subPanel) {
+                panel.panel = a(new Panel(subPanel, panel), null);
+            }
+
+            // Terminal condition
+            if (panel.next === null) {
+                root.lastPanel = panel;
+                while (panel.prev !== null) {
+                    if (panel.prev.depth !== panel.depth) {
+                        root.firstPanel = panel;
+                        return panel;
+                    }
+                    panel = panel.prev;
+                }
+                root.firstPanel = panel;
+                return panel;
+            }
+            return a(panel.next, panel);
+        })(new Panel(root.$.find(SEL.NODE), root), null);
     }
 
-    /**
-     * Function that inserts an element and checks
-     * @returns {boolean}
-     */
-    var isMobile = (function() {
-        document.body.insertAdjacentHTML('afterend', '<span id="jpanel-mobile-check"></span>');
-        var mobileNode = document.getElementById("jpanel-mobile-check");
-        return function() {
-            if (window.getComputedStyle) {
-                return +window.getComputedStyle(mobileNode, null).getPropertyValue('z-index') === 2;
-            } else if (mobileNode.currentStyle){
-                return +mobileNode.currentStyle.zIndex === 2;
-            }
-        };
-    })();
-    window.Jpanel = new Jpanel();
-    window.Jpanel.init();
-    window.Jpanel.isMobile = isMobile; //todo: figure out if this is necessary, and if so, clean it up.
-})();
+
+    jPanel.init();
+
+    if (typeof define === "function" && define.amd) {
+        // Remain anonymous if AMD library is available
+        define(function() {
+            return jPanel;
+        });
+    } else {
+        // Otherwise register jPanel as a global
+        window.jPanel = jPanel;
+    }
+
+}());
