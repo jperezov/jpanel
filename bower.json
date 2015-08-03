@@ -1,7 +1,7 @@
 {
   "name": "jPanel",
   "version": "0.2.0",
-  "homepage": "https://github.com/jperezov/jpanel",
+  "homepage": "http://jperezov.github.io/jpanel/",
   "authors": [
     "Jonathan Perez <jonathan@bluecranegames.com>"
   ],
@@ -16,6 +16,18 @@
     "slideshow",
     "javascript-navigation"
   ],
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-cssmin": "^0.12.3",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "^0.9.1",
+    "intern": "^2.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jperezov/jpanel.git"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
