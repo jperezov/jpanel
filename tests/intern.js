@@ -25,7 +25,7 @@ define([
         // Note that the `build` capability will be filled in with the current commit ID from the Travis CI environment
         // automatically
         capabilities: {
-            'selenium-version': '2.45.0'
+            'selenium-version': '2.43.0'
         },
 
         // Browsers to run integration testing against. Note that version numbers must be strings if used with Sauce
@@ -54,8 +54,8 @@ define([
             'host-browser': 'node_modules/dojo/dojo.js'
         },
 
-        // Configuration options for the module loader; any AMD configuration options supported by the specified AMD loader
-        // can be used here
+        // Configuration options for the module loader; any AMD configuration options supported by
+        // the specified AMD loader can be used here
         loader: {
             // Packages that should be registered with the loader in each testing environment
             packages: [ {name: 'jpanel', location: '/src/js/exports/jpanel'} ]
