@@ -4,6 +4,7 @@
  * Licensed under the MIT License.
  */
 (function() {
+    "use strict";
     /**
      * Class name constants
      * @const
