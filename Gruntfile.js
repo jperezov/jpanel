@@ -26,7 +26,7 @@ module.exports = function(grunt) {
                     // Avoid breaking semicolons inserted by r.js
                     skipSemiColonInsertion: true,
                     wrap: {
-                        start: "/**!\n * jPanel v<%= pkg.version %>\n * Copyright (c) 2015 Jonathan Perez.\n * Licensed under the MIT License.\n */\n(function() {\n",
+                        start: "/**!\n * jPanel v<%= pkg.version %>\n * Copyright (c) 2015 Jonathan Perez.\n * Licensed under the MIT License.\n */\n(function() {\n    \"use strict\";\n",
                         end: "}());"
                     },
                     rawText: {},

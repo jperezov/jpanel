@@ -1,4 +1,4 @@
-#jPanel Library v0.2.0
+#jPanel Library v0.2.0 [![Build Status](https://travis-ci.org/jperezov/jpanel.svg?branch=master)](https://travis-ci.org/jperezov/jpanel)
 
 A lightweight library for panel-like navigation. Makes use of HTML5 data-* attributes to allow for customization without writing any javascript.
 
